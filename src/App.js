@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 
 import Particles from 'react-particles-js';
 // import Clarifai from 'clarifai';
@@ -11,6 +10,13 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
+import Modal from './components/Modal/Modal';
+import Profile from './components/Profile/Profile';
+
+import './App.css';
+
+// const apiUrl = 'https://whispering-brook-96731.herokuapp.com';
+const apiUrl = 'https://localhost:3000';
 
 const particlesOptions = {
   particles: {
@@ -32,8 +38,9 @@ const initialState = {
   input: '',
   imageUrl: '',
   boxes: [],
-  route: 'signin',
+  route: 'home',
   isSignedIn: false,
+  isProfileOpen: false,
   user: {
     id: '',
     name: '',
@@ -90,7 +97,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    fetch('https://whispering-brook-96731.herokuapp.com/imageurl', {
+    fetch(`${apiUrl}/imageurl`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -100,7 +107,7 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('https://whispering-brook-96731.herokuapp.com/image', {
+          fetch(`${apiUrl}/image`, {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -120,15 +127,22 @@ class App extends Component {
 
   onRouteChange = route => {
     if (route === 'signout') {
-      this.setState(initialState);
+      return this.setState(initialState);
     } else if (route === 'home') {
       this.setState({ isSignedIn: true });
     }
     this.setState({ route: route });
   };
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen,
+    }));
+  };
+
   render() {
-    const { isSignedIn, imageUrl, route, boxes } = this.state;
+    const { isSignedIn, imageUrl, route, boxes, isProfileOpen } = this.state;
 
     return (
       <div className='App'>
@@ -137,7 +151,17 @@ class App extends Component {
         <Navigation
           isSignedIn={isSignedIn}
           onRouteChange={this.onRouteChange}
+          toggleModal={this.toggleModal}
         />
+
+        {isProfileOpen && (
+          <Modal>
+            <Profile
+              isProfileOpen={isProfileOpen}
+              toggleModal={this.toggleModal}
+            />
+          </Modal>
+        )}
 
         {route === 'home' ? (
           <div>
