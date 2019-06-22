@@ -2,6 +2,9 @@ import React from 'react';
 
 import './Signin.css';
 
+// const apiUrl = 'https://whispering-brook-96731.herokuapp.com';
+const apiUrl = 'http://localhost:3000';
+
 class Signin extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +23,7 @@ class Signin extends React.Component {
   };
 
   onSubmitSignIn = () => {
-    fetch('https://whispering-brook-96731.herokuapp.com/signin', {
+    fetch(`${apiUrl}/signin`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -28,13 +31,18 @@ class Signin extends React.Component {
         password: this.state.signInPassword,
       }),
     })
-      .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          this.props.loadUser(user);
+      .then(response => {
+        console.log(response);
+
+        return response.json();
+      })
+      .then(data => {
+        if (data.userId) {
+          this.props.loadUser(data);
           this.props.onRouteChange('home');
         }
-      });
+      })
+      .catch(console.log);
   };
 
   render() {

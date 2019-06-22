@@ -16,7 +16,7 @@ import Profile from './components/Profile/Profile';
 import './App.css';
 
 // const apiUrl = 'https://whispering-brook-96731.herokuapp.com';
-const apiUrl = 'https://localhost:3000';
+const apiUrl = 'http://localhost:3000';
 
 const particlesOptions = {
   particles: {
@@ -47,6 +47,8 @@ const initialState = {
     email: '',
     entries: 0,
     joined: '',
+    age: '',
+    pet: '',
   },
 };
 
@@ -142,7 +144,14 @@ class App extends Component {
   };
 
   render() {
-    const { isSignedIn, imageUrl, route, boxes, isProfileOpen } = this.state;
+    const {
+      isSignedIn,
+      imageUrl,
+      route,
+      boxes,
+      isProfileOpen,
+      user,
+    } = this.state;
 
     return (
       <div className='App'>
@@ -159,6 +168,8 @@ class App extends Component {
             <Profile
               isProfileOpen={isProfileOpen}
               toggleModal={this.toggleModal}
+              user={user}
+              loadUser={this.loadUser}
             />
           </Modal>
         )}
