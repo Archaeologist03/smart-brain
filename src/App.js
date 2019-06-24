@@ -99,6 +99,8 @@ class App extends Component {
         email: data.email,
         entries: data.entries,
         joined: data.joined,
+        age: data.age,
+        pet: data.pet,
       },
     });
   };
