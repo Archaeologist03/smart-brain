@@ -20,6 +20,11 @@ class ProfileIcon extends React.Component {
     }));
   };
 
+  signingOut = () => {
+    this.props.onRouteChange('signout');
+    window.sessionStorage.removeItem('token');
+  };
+
   render() {
     return (
       <div className='pa4 tc'>
@@ -44,9 +49,7 @@ class ProfileIcon extends React.Component {
             <DropdownItem onClick={() => this.props.toggleModal()}>
               View Profile
             </DropdownItem>
-            <DropdownItem onClick={() => this.props.onRouteChange('signout')}>
-              Sign out
-            </DropdownItem>
+            <DropdownItem onClick={this.signingOut}>Sign out</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
